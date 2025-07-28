@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Portfólio UGC – Jemima Inocêncio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- FONTES ATUALIZADAS: Adicionado 'Dancing Script' para o subtítulo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500&family=Playfair+Display:wght@900&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --marrom-claro: #c48c64;
+            --bege-claro: #dbbcac;
+            --marrom-escuro: #603d24;
+            --verde-cinza: #7c8472;
+            --cinza-bege: #bcb4a4;
+            --marrom-medio: #a56e4a;
+        }
+        
+        /* ===== ANIMAÇÃO DE FUNDO OSCILANTE ===== */
+        @keyframes oscillateBackground {
+            0% { background-color: #c48c64 }
+            50% { background-color: #b57e59; } /* Tom intermediário */
+            100% { background-color: var(--marrom-claro); }
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden; /* Previne scroll horizontal */
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: var(--marrom-claro);
+            color: var(--marrom-escuro);
+            scroll-behavior: smooth;
+            animation: oscillateBackground 20s ease-in-out infinite;
+        }
+        .menu {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            z-index: 1002;
+        }
+        .hamburger {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            cursor: pointer;
+            user-select: none;
+            gap: 7px;
+        }
+        .bar {
+            width: 38px;
+            height: 7px;
+            background: var(--marrom-escuro);
+            border-radius: 5px;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.2s ease-in-out;
+        }
+        .hamburger.open .bar:nth-child(1) {
+            transform: translateY(14px) rotate(45deg);
+        }
+        .hamburger.open .bar:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.open .bar:nth-child(3) {
+            transform: translateY(-14px) rotate(-45deg);
+        }
+
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background: var(--bege-claro);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.08);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            padding: 80px 20px 40px;
+            transform: translateX(-100%);
+            transition: transform 0.4s cubic-bezier(0.77, 0, 0.18, 1);
+        }
+        .side-menu.open {
+            transform: translateX(0);
+        }
+        .side-menu a {
+            color: var(--marrom-escuro);
+            text-decoration: none;
+            font-size: 1.2rem;
+            margin: 18px 0;
+            font-family: 'Roboto Mono', monospace;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, color 0.2s;
+        }
+        .side-menu a:hover {
+            color: var(--verde-cinza);
+        }
+        .side-menu.open a {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .side-menu.open .side-link:nth-of-type(1) { transition-delay: 0.15s; }
+        .side-menu.open .side-link:nth-of-type(2) { transition-delay: 0.20s; }
+        .side-menu.open .side-link:nth-of-type(3) { transition-delay: 0.25s; }
+        .side-menu.open .side-link:nth-of-type(4) { transition-delay: 0.30s; }
+        .side-menu.open .side-link:nth-of-type(5) { transition-delay: 0.35s; }
+        .side-menu.open .side-link:nth-of-type(6) { transition-delay: 0.40s; }
+        .side-menu.open .side-link:nth-of-type(7) { transition-delay: 0.45s; }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.2);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .overlay.open {
+            display: block;
+            opacity: 1;
+        }
+        header {
+            width: 100vw;
+            text-align: center;
+            margin-top: 40px;
+            background: transparent; /* Fundo do header transparente para ver a animação do body */
+            position: relative;
+        }
+        h1, section h2, .footer-logo, .sobre-mim-titulo {
+            font-family: 'Playfair Display', serif;
+        }
+        h1 {
+            font-size: 7vw;
+            letter-spacing: 2px;
+            margin: 0;
+            font-weight: 900;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .main-title .letter {
+            display: inline-block;
+            opacity: 0;
+            animation: fadeInUp 0.5s forwards;
+            font-family: 'Bahir', 'Playfair Display', serif;
+            transform: scaleY(1.3);
+        }
+        .main-title .word-ugc .letter { color: var(--marrom-escuro); }
+        .main-title .word-portfolio .letter { color: var(--bege-claro); }
+        .main-title .word-ugc { margin-right: 0.25em; }
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 900px;
+            margin: 0 auto;
+            margin-top: 10px;
+            font-size: 1.1rem;
+            font-family: 'Roboto Mono', monospace;
+        }
+        .nome, .funcao {
+            opacity: 0;
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .nome { transform: translateX(-30px); }
+        .funcao { transform: translateX(30px); }
+        .nome.visible, .funcao.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .nome {
+            margin-left: 10vw;
+            letter-spacing: 1px;
+        }
+        .funcao {
+            margin-right: 10vw;
+            text-align: right;
+            letter-spacing: 1px;
+        }
+        
+        .foto-perfil {
+            width: 420px;
+            max-width: 90vw;
+            margin: -140px auto 30px auto;
+            display: block;
+            position: relative;
+            z-index: 2;
+            -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+            mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100vw;
+        }
+        section {
+            background: var(--bege-claro);
+            border-radius: 18px;
+            box-shadow: 0 2px 12px rgba(96,61,36,0.04);
+            padding: 32px 24px;
+            margin: 32px 0;
+            max-width: 900px;
+            width: 90vw;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        section:not(.nichos-section-wrapper, .split-section-wrapper, .ugc-section-wrapper):hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(96,61,36,0.1);
+        }
+        section h2 {
+            font-size: 2.2rem;
+            margin-top: 0;
+        }
+        
+        .contato-section {
+            background: var(--cinza-bege);
+            text-align: center;
+        }
+        
+        /* ===== ESTILO GENÉRICO PARA SEÇÕES DIVIDIDAS (SOBRE MIM, PARCERIAS, CLIENTES) ===== */
+        .split-section-wrapper {
+            background: none;
+            box-shadow: none;
+            padding: 0;
+            margin: 32px 0;
+            max-width: 100vw;
+            width: 100vw;
+        }
+        .split-section-wrapper:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        .split-container {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            min-height: 350px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .split-photo-col {
+            flex: 1 1 50%;
+            height: auto;
+            min-height: 600px;
+            overflow: hidden;
+            display: flex;
+            align-items: stretch;
+        }
+        .split-photo-col img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+            display: block;
+        }
+        .split-text-col {
+            flex: 1 1 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 32px;
+        }
+        
+        /* Estilos específicos por seção */
+        #sobre .split-container { background: var(--cinza-bege); }
+        #sobre .split-text-col { background: var(--marrom-claro); }
+        #parcerias .split-text-col { background: var(--marrom-medio); color: var(--bege-claro); }
+        #clientes .split-container { background: var(--cinza-bege); flex-direction: row-reverse; }
+        #clientes .split-text-col { background: var(--cinza-bege); color: var(--marrom-escuro); }
+
+
+        .sobre-mim-titulo {
+            font-size: 4rem;
+            margin: 0 0 24px 0;
+            letter-spacing: 2px;
+        }
+        .sobre-mim-descricao {
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+
+        .nichos-section-wrapper {
+            background: none;
+            box-shadow: none;
+            padding: 4rem 0;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .nichos-container {
+            display: grid;
+            grid-template-columns: 1.1fr 1.5fr 0.7fr;
+            gap: 2rem;
+            align-items: flex-start;
+            padding: 0 2rem;
+        }
+        .nichos-title-col {
+            text-align: left;
+            position: relative;
+        }
+        .nichos-title-large {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(4rem, 8vw, 7rem);
+            line-height: 1.1;
+            margin: 0;
+        }
+        .nichos-title-large .meus { color: var(--marrom-escuro); }
+        .nichos-title-large .nichos { color: #e4e2dd; }
+        .nichos-title-large span {
+            display: block;
+        }
+        .arrow-wrapper {
+            position: absolute;
+            top: 25px;
+            right: -20px;
+            height: 60px;
+        }
+        .nichos-title-col img {
+            width: 100%;
+            max-width: 100%;
+            margin-top: 0.5rem;
+            border-radius: 12px;
+            -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+            mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+        }
+        .nichos-text-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            padding-top: 1rem;
+        }
+        .nicho-item {
+            background: none;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        .nicho-item h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--marrom-escuro);
+            margin: 0 0 0.5rem 0;
+            font-size: 1.4rem;
+            font-weight: 900;
+        }
+        .nicho-item p {
+            margin: 0;
+            color: var(--marrom-escuro);
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        .nichos-gallery-col {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+        }
+        .nichos-gallery-col img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(96,61,36,0.15);
+            object-fit: cover;
+            transition: transform 0.3s ease-in-out;
+        }
+        .nichos-gallery-col img:hover {
+            transform: scale(1.05);
+        }
+
+        .parcerias-title-main {
+            font-family: 'Bahir', 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 1.1;
+            margin: 0 0 24px 0;
+            text-transform: none;
+        }
+        .parcerias-description {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+        .parcerias-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .clientes-title-main {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(3rem, 6vw, 5rem);
+            line-height: 1.1;
+            text-transform: uppercase;
+            margin: 0;
+        }
+        .clientes-title-sub {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            color: var(--marrom-claro);
+            margin: -0.5rem 0 1.5rem 5px;
+        }
+        .clientes-description, .clientes-footer-text {
+            line-height: 1.7;
+            max-width: 550px;
+        }
+        .clientes-description {
+            margin-bottom: 2rem;
+        }
+        .clientes-footer-text {
+            margin-top: 2rem;
+        }
+        .clientes-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        
+        .iphone-mockup {
+            position: relative;
+            border: 8px solid #111;
+            border-radius: 40px;
+            background: #111;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            padding: 2px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .iphone-mockup:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+        .iphone-mockup::before {
+            content: '';
+            position: absolute;
+            top: 0px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 18px;
+            background: #111;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            z-index: 2;
+        }
+        .iphone-screen {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 32px;
+            object-fit: cover;
+        }
+        #parcerias .iphone-screen {
+             aspect-ratio: 9 / 16;
+        }
+        #clientes .iphone-screen {
+            aspect-ratio: 1 / 1;
+        }
+
+        /* ===== ESTILOS DA SEÇÃO UGC COM FUNDO DE IMAGEM ===== */
+        .ugc-section-wrapper {
+            background: none;
+            box-shadow: none;
+            padding: 6rem 0;
+            margin: 32px 0;
+            max-width: 100vw;
+            width: 100vw;
+            position: relative;
+            background-image: url('imagens/nicho1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Efeito Parallax */
+        }
+        .ugc-section-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(96, 61, 36, 0.7); /* Overlay marrom escuro */
+            z-index: 1;
+        }
+        .ugc-content-container {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            width: 90vw;
+            margin: 0 auto;
+            padding: 2rem;
+            background: rgba(219, 188, 172, 0.2); /* Efeito de vidro sutil */
+            border: 1px solid rgba(219, 188, 172, 0.3);
+            border-radius: 18px;
+            backdrop-filter: blur(5px);
+        }
+        .ugc-content-container h2 {
+            color: var(--bege-claro);
+        }
+        .ugc-content-container p,
+        .ugc-content-container li {
+            color: var(--bege-claro);
+        }
+        .ugc-content-container strong {
+            color: #fff;
+        }
+        
+        .site-footer {
+            background-color: var(--marrom-escuro);
+            color: var(--bege-claro);
+            padding: 50px 30px;
+            margin-top: 0;
+            width: 100vw;
+        }
+        .footer-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: var(--bege-claro);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover {
+            color: #fff;
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+        .social-icons a {
+            color: var(--bege-claro);
+            transition: transform 0.3s, color 0.3s;
+        }
+        .social-icons a:hover {
+            color: #fff;
+            transform: translateY(-4px);
+        }
+        .social-icons svg {
+            width: 24px;
+            height: 24px;
+        }
+        .footer-copyright {
+            font-size: 0.9rem;
+            color: var(--cinza-bege);
+            border-top: 1px solid var(--marrom-claro);
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Media Queries */
+        @media (max-width: 1024px) {
+            .nichos-container {
+                grid-template-columns: 1fr 1.5fr;
+                gap: 1.5rem;
+            }
+            .nichos-gallery-col { display: none; }
+            .arrow-wrapper { right: -10px; }
+        }
+
+        @media (max-width: 900px) {
+            .split-container { flex-direction: column !important; } /* Força coluna em mobile */
+            .split-photo-col, .split-text-col {
+                flex: 1 1 100%;
+                width: 100%;
+                padding: 0;
+            }
+            .split-text-col {
+                padding: 32px 16px;
+                align-items: center;
+                text-align: center;
+            }
+            .sobre-mim-titulo {
+                font-size: 2.5rem;
+            }
+        }
+        @media (max-width: 768px) {
+            .nichos-container {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+            }
+            .nichos-title-col { text-align: center; }
+            .nichos-title-col img {
+                display: block;
+                margin: 2rem auto 0;
+            }
+            .arrow-wrapper { display: none; }
+            .parcerias-gallery, .clientes-gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 700px) {
+            h1 { font-size: 12vw; }
+            .info {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                max-width: 100vw;
+            }
+            .nome, .funcao {
+                margin: 0;
+                text-align: center;
+            }
+            .foto-perfil { width: 80vw; }
+            section { padding: 18px 6vw; }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay" id="overlay"></div>
+    <nav class="menu">
+        <div class="hamburger" id="menuBtn">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </nav>
+    <nav class="side-menu" id="sideMenu">
+        <a href="#capa" class="side-link">Início</a>
+        <a href="#sobre" class="side-link">Sobre Mim</a>
+        <a href="#ugc" class="side-link">O que é UGC</a>
+        <a href="#nichos" class="side-link">Meus Nichos</a>
+        <a href="#parcerias" class="side-link">Parcerias</a>
+        <a href="#clientes" class="side-link">Clientes</a>
+        <a href="#contato" class="side-link">Contato</a>
+    </nav>
+    <header id="capa">
+        <h1 class="main-title" aria-label="UGC PORTFOLIO"></h1>
+        <div class="info">
+            <span class="nome">JEMIMA INOCÊNCIO</span>
+            <span class="funcao">UGC<br>CREATOR</span>
+        </div>
+        <img src="imagens/IMG-20250724-WA0089_1_-removebg-preview.png" alt="Jemima Inocêncio" class="foto-perfil" onerror="this.onerror=null; this.src='https://placehold.co/420x420/c48c64/603d24?text=Jemima';">
+    </header>
+    <main>
+        <section id="sobre" class="split-section-wrapper animate-on-scroll">
+            <div class="split-container">
+                <div class="split-photo-col">
+                    <img src="imagens/sobremim.jpg" alt="Foto Sobre Mim" onerror="this.onerror=null; this.src='https://placehold.co/600x700/eaeaea/603d24?text=Foto';">
+                </div>
+                <div class="split-text-col">
+                    <h2 class="sobre-mim-titulo">SOBRE MIM</h2>
+                    <div class="sobre-mim-descricao">
+                        <p>Olá! Eu sou a Jemima Inocêncio — criadora de conteúdo UGC, enfermeira por vocação e apaixonada por transformar vivências reais em conexão autêntica com o público.</p>
+                        <p>Acredito que a melhor forma de comunicar é vivendo o que se compartilha. Por isso, meu conteúdo reflete minha rotina intensa, os desafios da profissão e os pequenos momentos de autocuidado que fazem toda a diferença.</p>
+                        <p>Uso minha experiência na área da saúde, minha linguagem próxima e meu olhar criativo para produzir vídeos, fotos e conteúdos que geram identificação, confiança e resultados reais para marcas que desejam falar com gente de verdade.</p>
+                        <p>Mais do que divulgar produtos, eu conto histórias — e é isso que faz o conteúdo UGC se destacar.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="ugc" class="ugc-section-wrapper animate-on-scroll">
+            <div class="ugc-content-container">
+                <h2>O que é UGC e como se conecta com meu perfil</h2>
+                <p><strong>UGC (User Generated Content)</strong> significa conteúdo gerado por usuários reais. São vídeos, fotos e relatos feitos por pessoas comuns, fora do ambiente publicitário tradicional. Isso gera mais credibilidade, conexão emocional e identificação com o público.<br><br>
+                No meu caso, como profissional da saúde com uma rotina intensa e autêntica, o conteúdo ganha ainda mais valor porque:</p>
+                <ul>
+                    <li>Mostro produtos sendo usados no dia a dia, de forma sincera e prática.</li>
+                    <li>Tenho autoridade com temas como bem-estar, autocuidado e vida corrida.</li>
+                    <li>Minha audiência confia no que indico porque compartilho minha vivência.</li>
+                    <li>Transformo produtos em histórias – e não apenas em propaganda.</li>
+                </ul>
+                <p>Em outras palavras: não vendo produto — eu vivo o produto. E isso vende.</p>
+            </div>
+        </section>
+
+        <section id="nichos" class="nichos-section-wrapper animate-on-scroll">
+            <div class="nichos-container">
+                <div class="nichos-title-col">
+                    <h2 class="nichos-title-large">
+                        <span class="meus">MEUS</span><span class="nichos">NICHOS</span>
+                    </h2>
+                    <div class="arrow-wrapper">
+                        <svg width="67" height="42" viewBox="0 0 67 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 21.3379L65.5 21.3379" stroke="#603D24" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M46 1L66 21L46 41" stroke="#603D24" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <img src="imagens/ninchos.png" alt="Jemima Inocêncio vestindo jaleco" onerror="this.onerror=null; this.src='https://placehold.co/300x400/dbbcac/603d24?text=Foto';">
+                </div>
+                <div class="nichos-text-col">
+                    <div class="nicho-item">
+                        <h3>Enfermagem com Propósito & Superação</h3>
+                        <p>Mostro os bastidores da profissão, histórias reais, desafios e vitórias que conectam com profissionais e estudantes da área da saúde. Minha comunidade encontra acolhimento, motivação, representatividade e também acesso a cursos, eventos e atualizações que fortalecem a prática e a autoestima profissional. É um conteúdo que inspira, informa e humaniza quem vive a Enfermagem por vocação.</p>
+                    </div>
+                    <div class="nicho-item">
+                        <h3>Bem-estar & Saúde Mental</h3>
+                        <p>Falo sobre saúde emocional, autocuidado possível e práticas simples que cabem na rotina de quem cuida dos outros — mas precisa cuidar de si.</p>
+                    </div>
+                     <div class="nicho-item">
+                        <h3>Fitness e Estilo de Vida Saudável</h3>
+                        <p>Compartilho treinos, jornada de saúde, provadores fitness e produtos que facilitam manter o movimento mesmo em uma rotina puxada.</p>
+                    </div>
+                    <div class="nicho-item">
+                        <h3>Lifestyle com Propósito</h3>
+                        <p>Incluo dicas de autocuidado, skincare, cabelo, roupas confortáveis (inclusive para o ambiente profissional), produtos de farmácia e itens essenciais para quem vive a saúde de forma real.</p>
+                    </div>
+                </div>
+                <div class="nichos-gallery-col">
+                    <img src="imagens/nicho1.jpg" alt="Galeria de fotos 1" onerror="this.onerror=null; this.src='https://placehold.co/300x200/dbbcac/603d24?text=Foto';">
+                    <img src="imagens/nicho2.jpg" alt="Galeria de fotos 2" onerror="this.onerror=null; this.src='https://placehold.co/300x400/dbbcac/603d24?text=Foto';">
+                    <img src="imagens/nicho3.jpg" alt="Galeria de fotos 3" onerror="this.onerror=null; this.src='https://placehold.co/300x300/dbbcac/603d24?text=Foto';">
+                </div>
+            </div>
+        </section>
+
+        <section id="parcerias" class="split-section-wrapper animate-on-scroll">
+            <div class="split-container">
+                <div class="split-photo-col">
+                    <img src="imagens/parcerias.jpg" alt="Jemima Inocêncio sorrindo com um tablet" onerror="this.onerror=null;this.src='https://placehold.co/600x800/dbbcac/603d24?text=Foto';">
+                </div>
+                <div class="split-text-col">
+                    <div>
+                        <h2 class="parcerias-title-main">Parcerias que conectam</h2>
+                        <p class="parcerias-description">
+                            Ao longo da minha jornada como criadora de conteúdo e UGC, tive a oportunidade de colaborar com marcas que acreditam na força da autenticidade e na conexão real com o público. Cada projeto foi construído com intenção, estética e estratégia - respeitando a identidade da marca e entregando vivência e conteúdo com alto poder de engajamento.
+                        </p>
+                        <div class="parcerias-gallery">
+                            <div class="iphone-mockup">
+                                <img class="iphone-screen" src="imagens/video1.jpg" alt="Thumbnail do vídeo 1" onerror="this.onerror=null; this.src='https://placehold.co/300/dbbcac/603d24?text=Video+1';">
+                            </div>
+                            <div class="iphone-mockup">
+                                <img class="iphone-screen" src="imagens/video2.jpg" alt="Thumbnail do vídeo 2" onerror="this.onerror=null; this.src='https://placehold.co/300/dbbcac/603d24?text=Video+2';">
+                            </div>
+                            <div class="iphone-mockup">
+                                 <img class="iphone-screen" src="imagens/video3.jpg" alt="Thumbnail do vídeo 3" onerror="this.onerror=null; this.src='https://placehold.co/300/dbbcac/603d24?text=Video+3';">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="clientes" class="split-section-wrapper animate-on-scroll">
+            <div class="split-container">
+                <div class="split-photo-col">
+                    <img src="imagens/clientes.jpg" alt="Jemima Inocêncio olhando para um tablet" onerror="this.onerror=null;this.src='https://placehold.co/600x800/dbbcac/603d24?text=Foto';">
+                </div>
+                <div class="split-text-col">
+                    <div>
+                        <h2 class="clientes-title-main">Clientes</h2>
+                        <h3 class="clientes-title-sub">Conexões reais que viraram resultados</h3>
+                        <p class="clientes-description">
+                            Cada marca que confia no meu trabalho é parte de uma história construída com propósito, criatividade e entrega. Meu foco é transformar produtos em experiências visuais que despertam identificação, desejo e ação - sempre com estética autêntica e linguagem próxima.
+                        </p>
+                        <div class="clientes-gallery">
+                            <div class="iphone-mockup">
+                                <img class="iphone-screen" src="imagens/cliente1.jpg" alt="Trabalho para cliente 1" onerror="this.onerror=null; this.src='https://placehold.co/300/dbbcac/603d24?text=Cliente+1';">
+                            </div>
+                            <div class="iphone-mockup">
+                                <img class="iphone-screen" src="imagens/cliente2.jpg" alt="Trabalho para cliente 2" onerror="this.onerror=null; this.src='https://placehold.co/300/dbbcac/603d24?text=Cliente+2';">
+                            </div>
+                            <div class="iphone-mockup">
+                                <img class="iphone-screen" src="imagens/cliente3.jpg" alt="Trabalho para cliente 3" onerror="this.onerror=null; this.src='https://placehold.co/300/dbbcac/603d24?text=Cliente+3';">
+                            </div>
+                        </div>
+                        <p class="clientes-footer-text">
+                            Trabalhei com marcas que valorizam conteúdo humanizado e sabem o poder de uma comunicação que fala com pessoas reais. E se a sua marca busca esse tipo de conexão, já temos tudo pra dar certo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contato" class="contato-section animate-on-scroll">
+            <h2>Contato</h2>
+            <p>Entre em contato pelo Instagram: <a href="https://instagram.com/jemima.superacaoenfermagem" target="_blank">@jemima.superacaoenfermagem</a></p>
+        </section>
+    </main>
+    
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-logo">Jemima Inocêncio</div>
+            <div class="footer-links">
+                <a href="#capa">Início</a>
+                <a href="#sobre">Sobre Mim</a>
+                <a href="#ugc">O que é UGC</a>
+                <a href="#nichos">Meus Nichos</a>
+                <a href="#parcerias">Parcerias</a>
+                <a href="#clientes">Clientes</a>
+            </div>
+            <div class="social-icons">
+                <a href="https://instagram.com/jemima.superacaoenfermagem" target="_blank" aria-label="Instagram">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+                <a href="#" target="_blank" aria-label="TikTok"> <!-- Coloque o link do seu TikTok aqui -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-2.43.05-4.85-.38-6.75-1.77-2.06-1.52-3.05-3.88-3.09-6.35-.03-2.18.71-4.36 2.2-5.88 1.81-1.76 4.3-2.31 6.69-1.81.38.07.75.18 1.12.32.05-1.58.02-3.16.01-4.74z"/></svg>
+                </a>
+                <a href="#" target="_blank" aria-label="LinkedIn"> <!-- Coloque o link do seu LinkedIn aqui -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </a>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2025 Jemima Inocêncio. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- ANIMAÇÃO DO TÍTULO PRINCIPAL ---
+            const mainTitle = document.querySelector('.main-title');
+            const words = [
+                { text: 'UGC', class: 'word-ugc' },
+                { text: 'PORTFOLIO', class: 'word-portfolio' }
+            ];
+            let totalDelay = 0;
+
+            words.forEach(wordObj => {
+                const wordSpan = document.createElement('span');
+                wordSpan.className = wordObj.class;
+                
+                wordObj.text.split('').forEach((char, index) => {
+                    const letterSpan = document.createElement('span');
+                    letterSpan.className = 'letter';
+                    letterSpan.innerHTML = char === ' ' ? '&nbsp;' : char;
+                    letterSpan.style.animationDelay = `${totalDelay}s`;
+                    wordSpan.appendChild(letterSpan);
+                    totalDelay += 0.07; // Atraso entre cada letra
+                });
+                mainTitle.appendChild(wordSpan);
+            });
+
+            // --- ANIMAÇÃO DO NOME E FUNÇÃO ---
+            setTimeout(() => {
+                document.querySelector('.nome').classList.add('visible');
+                document.querySelector('.funcao').classList.add('visible');
+            }, totalDelay * 1000); // Inicia após a animação do título
+
+            // --- MENU LATERAL ---
+            const menuBtn = document.getElementById('menuBtn');
+            const sideMenu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('overlay');
+
+            function toggleMenu() {
+                menuBtn.classList.toggle('open');
+                sideMenu.classList.toggle('open');
+                overlay.classList.toggle('open');
+            }
+
+            function closeSideMenu() {
+                menuBtn.classList.remove('open');
+                sideMenu.classList.remove('open');
+                overlay.classList.remove('open');
+            }
+
+            menuBtn.onclick = toggleMenu;
+            overlay.onclick = closeSideMenu;
+            
+            document.querySelectorAll('.side-link').forEach(link => {
+                link.onclick = closeSideMenu;
+            });
+
+            // --- ANIMAÇÃO AO ROLAR ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            const elementsToAnimate = document.querySelectorAll('.animate-on-scroll');
+            elementsToAnimate.forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
